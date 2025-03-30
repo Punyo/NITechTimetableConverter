@@ -1,11 +1,6 @@
 ﻿using ClosedXML.Excel;
 using NITechTimetableConverter.Data;
 using NITechTimetableConverter.Properties;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NITechTimetableConverter.Model
 {
@@ -22,17 +17,49 @@ namespace NITechTimetableConverter.Model
                 IXLWorksheet worksheet = templateWorkbook.Worksheet(1);
                 for (int i = 0; i < lectures.Count(); i++)
                 {
-                    foreach (Lecture lecture in lectures.ElementAt(i))
-                    {
-                        foreach (var c in lecture.Classes)
-                        {
-                            worksheet.Cell(dayOfWeekRowNumber + (int)c, dayOfWeekColumnNumbers[i] + (int)lecture.Period * 2).Value = lecture.ToString();
-                        }
-                    }
+                    WriteCellByDayOfWeek(lectures, worksheet, i);
                 }
                 returnWorkbook.AddWorksheet(worksheet);
             }
             return returnWorkbook;
+        }
+
+        private static void WriteCellByDayOfWeek(IEnumerable<IEnumerable<Lecture>> lectures, IXLWorksheet worksheet, int dayOfWeekIndex)
+        {
+            for (int ii = 0; ii < lectures.ElementAt(dayOfWeekIndex).Count(); ii++)
+            {
+                Lecture lecture = lectures.ElementAt(dayOfWeekIndex).ElementAt(ii);
+                Array.Sort(lecture.Classes);
+                int previousIndex = -1;
+                int currentStartCellIndex = -1;
+                for (int iii = 0; iii < lecture.Classes.Length; iii++)
+                {
+                    if (currentStartCellIndex == -1)
+                    {
+                        currentStartCellIndex = (int)lecture.Classes[iii];
+                    }
+                    int currentIndex = (int)lecture.Classes[iii];
+                    if (previousIndex != currentIndex - 1 && previousIndex != -1)
+                    {
+                        WriteAndMergeCell(worksheet, dayOfWeekIndex, lecture, previousIndex, currentStartCellIndex);
+                        currentStartCellIndex = currentIndex;
+                    }
+                    previousIndex = currentIndex;
+                }
+                if (currentStartCellIndex != -1)
+                {
+                    WriteAndMergeCell(worksheet, dayOfWeekIndex, lecture, previousIndex, currentStartCellIndex);
+                }
+            }
+        }
+
+        private static void WriteAndMergeCell(IXLWorksheet worksheet, int dayOfWeekIndex, Lecture lecture, int previousIndex, int currentStartCellIndex)
+        {
+            int startRow = dayOfWeekRowNumber + currentStartCellIndex;
+            int startColumn = dayOfWeekColumnNumbers[dayOfWeekIndex] + (int)lecture.Period * 2;
+            IXLCell cell = worksheet.Cell(startRow, startColumn);
+            cell.Value = lecture.ToString();
+            worksheet.Range(startRow, startColumn, startRow + (previousIndex - currentStartCellIndex), startColumn + (cell.IsMerged() ? 1 : 0)).Merge();
         }
     }
 }
