@@ -70,11 +70,30 @@ namespace NITechTimetableConverter.Properties {
         }
         
         /// <summary>
+        ///   エラーが発生しました（{0}）
+        ///時間割が配布されているそのままの状態から編集されている可能性があります に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string ErrorGeneric {
+            get {
+                return ResourceManager.GetString("ErrorGeneric", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   入力が無効か、入力されたファイルがXLSXファイルへのパスではありません に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string ErrorInputInvalidOrNonXLSX {
             get {
                 return ResourceManager.GetString("ErrorInputInvalidOrNonXLSX", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   ファイルの読み書きに失敗しました。変換対象のファイルや変換後のファイルと同名のファイルを開いている場合は閉じてください。 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string ErrorIOException {
+            get {
+                return ResourceManager.GetString("ErrorIOException", resourceCulture);
             }
         }
         
@@ -156,6 +175,15 @@ namespace NITechTimetableConverter.Properties {
         internal static string MessageOpeningConvertedXLSXFile {
             get {
                 return ResourceManager.GetString("MessageOpeningConvertedXLSXFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   再試行する場合はEnterを押してください... に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string MessageRetry {
+            get {
+                return ResourceManager.GetString("MessageRetry", resourceCulture);
             }
         }
         

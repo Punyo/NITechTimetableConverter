@@ -170,4 +170,14 @@
   <data name="MessageWritingLectureInfoComplete" xml:space="preserve">
     <value>講義情報書き込み完了</value>
   </data>
+  <data name="ErrorGeneric" xml:space="preserve">
+    <value>エラーが発生しました（{0}）
+時間割が配布されているそのままの状態から編集されている可能性があります</value>
+  </data>
+  <data name="ErrorIOException" xml:space="preserve">
+    <value>ファイルの読み書きに失敗しました。変換対象のファイルや変換後のファイルと同名のファイルを開いている場合は閉じてください。</value>
+  </data>
+  <data name="MessageRetry" xml:space="preserve">
+    <value>再試行する場合はEnterを押してください...</value>
+  </data>
 </root>
