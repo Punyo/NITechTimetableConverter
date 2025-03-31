@@ -100,7 +100,7 @@ namespace NITechTimetableConverter.Model
                         cell.Value += $"{Environment.NewLine}{Environment.NewLine}{lecture.ToString()}";
                     }
                 }
-                if (lectureRowLength >= 1)
+                if (lectureRowLength >= 1 && GetLowerCellOriginRow(worksheet, startColumn, startRow) - startRow == 1)
                 {
                     WriteAndMergeCell(worksheet, dayOfWeekIndex, lecture, previousIndex, currentStartCellIndex + 1);
                 }
@@ -122,7 +122,8 @@ namespace NITechTimetableConverter.Model
                 int cellRow = usedCells.ElementAt(i).WorksheetRow().RowNumber();
                 if (lastUsedRow == -1)
                 {
-                    worksheet.Range(startRow, startColumn, GetUpperCellOriginRow(worksheet, lastColumn, cellRow), lastColumn).Merge();
+                    int up = GetUpperCellOriginRow(worksheet, lastColumn, cellRow);
+                    worksheet.Range(startRow, startColumn, up, lastColumn).Merge();
                     lastUsedRow = cellRow;
                 }
                 else if (GetLowerCellOriginRow(worksheet, lastColumn, lastUsedRow) <= cellRow - 1)
