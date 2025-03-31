@@ -98,7 +98,7 @@ namespace NITechTimetableConverter.Properties {
         }
         
         /// <summary>
-        ///   注意：一部の教科の変換には対応していません。ごめんね に類似しているローカライズされた文字列を検索します。
+        ///   注意：1年生向けの時間割表の変換と一部の教科の変換には対応していません に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string MessageCaution {
             get {
