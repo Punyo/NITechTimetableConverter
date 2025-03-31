@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace NITechTimetableConverter.Data
 {
-    public record Lecture
+    public record Lecture : IParsable<Lecture>
     {
         public required string ID { get; init; }
         public required string Name { get; init; }
@@ -15,10 +16,46 @@ namespace NITechTimetableConverter.Data
         public required Period Period { get; init; }
         public string? Room { get; init; }
 
+        public static Lecture Parse(string s, IFormatProvider? provider = null)
+        {
+            string[] strings = s.Split(Environment.NewLine);
+            return new Lecture
+            {
+                ID = strings[0],
+                Name = strings[1],
+                Instructor = strings[2],
+                Room = (strings.Length > 3 ? strings[3] : null),
+                Classes = Array.Empty<Classes>(),
+                Period = Period.OneTwo
+            };
+        }
+
+        public static bool TryParse([NotNullWhen(true)] string? s, IFormatProvider? provider, [MaybeNullWhen(false)] out Lecture result)
+        {
+            try
+            {
+                result = Parse(s);
+                return true;
+            }
+            catch (Exception e) when (e is NullReferenceException || e is IndexOutOfRangeException)
+            {
+                result = null;
+                return false;
+            }
+        }
+
         public override string ToString()
         {
-            return $"{ID}{Environment.NewLine}{Name}{Environment.NewLine}{Instructor}{Environment.NewLine}{Room}";
+            if (string.IsNullOrEmpty(Room))
+            {
+                return $"{ID}{Environment.NewLine}{Name}{Environment.NewLine}{Instructor}";
+            }
+            else
+            {
+                return $"{ID}{Environment.NewLine}{Name}{Environment.NewLine}{Instructor}{Environment.NewLine}{Room}";
+            }
         }
+
     }
 
     public enum Classes
