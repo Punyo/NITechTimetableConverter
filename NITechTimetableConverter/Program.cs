@@ -28,7 +28,7 @@ internal class Program
         }
         catch (Exception e)
         {
-            ConsoleUtil.WriteLineWithColor(string.Format(Resources.ErrorGeneric, e.Message), ConsoleUtil.ColorMode.Error);
+            ConsoleUtil.WriteLineWithColor(string.Format(Resources.ErrorGeneric, e.ToString()), ConsoleUtil.ColorMode.Error);
             Console.WriteLine(Resources.MessageRetry);
             while (Console.ReadKey().Key != ConsoleKey.Enter) { }
             Main(Array.Empty<string>());

@@ -70,8 +70,12 @@ namespace NITechTimetableConverter.Properties {
         }
         
         /// <summary>
-        ///   エラーが発生しました（{0}）
-        ///時間割が配布されているそのままの状態から編集されている可能性があります に類似しているローカライズされた文字列を検索します。
+        ///   エラーが発生しました
+        ///------------------------
+        ///{0}
+        ///------------------------
+        ///時間割が配布されているそのままの状態から編集されている可能性があります
+        ///ダウンロードしてから一切変更を加えていない状態のXLSXファイルを指定してください に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string ErrorGeneric {
             get {
@@ -179,7 +183,8 @@ namespace NITechTimetableConverter.Properties {
         }
         
         /// <summary>
-        ///   再試行する場合はEnterを押してください... に類似しているローカライズされた文字列を検索します。
+        ///   再試行する場合は&lt;Enter&gt;を押してください...
+        /// に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string MessageRetry {
             get {

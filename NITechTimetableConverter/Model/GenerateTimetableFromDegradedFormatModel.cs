@@ -17,7 +17,7 @@ namespace NITechTimetableConverter.Model
             Console.WriteLine(Resources.MessageExtractingLectureInfoComplete);
             Console.WriteLine(Resources.MessageWritingLectureInfo);
             XLWorkbook workbook = TimetableWorkbookGenerator.GenerateTimetableWorkbook(lectureInfo);
-            workbook.Author = Resources.MessageCredit;
+            workbook.Properties.Author = Resources.MessageCredit;
             workbook.SaveAs(outputPath);
             Console.WriteLine(Resources.MessageWritingLectureInfoComplete);
             ConsoleUtil.WriteLineWithColor(string.Format(Resources.MessageConvertComplete), ConsoleUtil.ColorMode.Info);
