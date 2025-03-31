@@ -14,6 +14,6 @@ namespace NITechTimetableConverter.Data
         FiveSix,
         SevenEight,
         NineTen,
-        ElevenTwelve
+        OnDemand
     }
 }
