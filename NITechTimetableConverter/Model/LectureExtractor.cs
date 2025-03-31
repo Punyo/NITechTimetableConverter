@@ -7,6 +7,7 @@ namespace NITechTimetableConverter.Model
     internal class LectureExtractor
     {
         private readonly static string[] departmentAbbreviates = { "LC", "PE", "EM", "CS", "AC", "CR" };
+        private readonly static string allDepartments = "全学科";
 
         public static IEnumerable<IEnumerable<Lecture>> ExtractLecturesFromXLSXFile(string path, int worksheetIndex = 1)
         {
@@ -29,18 +30,24 @@ namespace NITechTimetableConverter.Model
                 {
                     int baseColumnNumber = j * 6 + rangeAddress.FirstAddress.ColumnNumber;
                     string id = worksheet.Cell(i, baseColumnNumber + 1).Value.ToString();
+                    string commaSeperatedClasses = worksheet.Cell(i, baseColumnNumber + (j == 5 ? 4 : 5)).Value.ToString();
+                    string lectureName = worksheet.Cell(i, baseColumnNumber + 2).Value.ToString();
                     if (string.IsNullOrEmpty(id))
                     {
                         break;
                     }
+                    if (string.IsNullOrEmpty(commaSeperatedClasses) && lectureName.IndexOf("English") == -1)
+                    {
+                        commaSeperatedClasses = allDepartments;
+                    }
                     Lecture lecture = new Lecture
                     {
                         ID = id,
-                        Name = worksheet.Cell(i, baseColumnNumber + 2).Value.ToString(),
+                        Name = lectureName,
                         Instructor = worksheet.Cell(i, baseColumnNumber + 3).Value.ToString(),
                         Room = j == 5 ? null : worksheet.Cell(i, baseColumnNumber + 4).Value.ToString(),
                         Period = (Period)j,
-                        Classes = ConvertCommaSeperatedStringToClasses(worksheet.Cell(i, baseColumnNumber + (j == 5 ? 4 : 5)).Value.ToString())
+                        Classes = ConvertCommaSeperatedStringToClasses(commaSeperatedClasses)
                     };
                     lectures.Add(lecture);
                 }
@@ -64,7 +71,7 @@ namespace NITechTimetableConverter.Model
                 }
                 catch (ArgumentException)
                 {
-                    if (classStrings[i] == "全学科")
+                    if (classStrings[i] == allDepartments)
                     {
                         classes.AddRange(Enum.GetValues<Classes>().Cast<Classes>());
                     }

@@ -28,7 +28,8 @@ namespace NITechTimetableConverter.Model
         {
             for (int ii = 0; ii < lectures.ElementAt(dayOfWeekIndex).Count(); ii++)
             {
-                Lecture lecture = lectures.ElementAt(dayOfWeekIndex).ElementAt(ii);
+
+                Lecture lecture = lectures.ElementAt(dayOfWeekIndex).OrderBy((l) => l.Classes.Length).ElementAt(ii);
                 Array.Sort(lecture.Classes);
                 int previousIndex = -1;
                 int currentStartCellIndex = -1;
@@ -61,7 +62,8 @@ namespace NITechTimetableConverter.Model
             if (string.IsNullOrEmpty(cell.Value.ToString()))
             {
                 cell.Value = lecture.ToString();
-                worksheet.Range(startRow, startColumn, startRow + (previousIndex - currentStartCellIndex), startColumn + ((lecture.Period == Period.OnDemand) ? 0 : 1)).Merge();
+                //worksheet.Range(startRow, startColumn, startRow + (previousIndex - currentStartCellIndex), startColumn + ((lecture.Period == Period.OnDemand) ? 0 : 1)).Merge();
+                SearchUsedCellsAndMergeUnusedArea(worksheet, lecture.ToString(), startRow, startColumn, startRow + (previousIndex - currentStartCellIndex), startColumn + ((lecture.Period == Period.OnDemand) ? 0 : 1));
 
             }
             else
@@ -99,6 +101,56 @@ namespace NITechTimetableConverter.Model
                     }
                 }
             }
+        }
+
+        private static void SearchUsedCellsAndMergeUnusedArea(IXLWorksheet worksheet, string cellValue, int startRow, int startColumn, int lastRow, int lastColumn)
+        {
+            IEnumerable<IXLCell> usedCells = worksheet.Range(startRow, startColumn, lastRow, startColumn).CellsUsed().Where((e) => { return !(e.WorksheetRow().RowNumber() == startRow && e.WorksheetColumn().ColumnNumber() == startColumn); });
+            string startCellValue = worksheet.Cell(startRow, startColumn).Value.ToString();
+            if (usedCells.Count() == 0)
+            {
+                worksheet.Range(startRow, startColumn, lastRow, lastColumn).Merge();
+                return;
+            }
+            int lastUsedRow = -1;
+            for (int i = 0; i < usedCells.Count(); i++)
+            {
+                int cellRow = usedCells.ElementAt(i).WorksheetRow().RowNumber();
+                if (lastUsedRow == -1)
+                {
+                    worksheet.Range(startRow, startColumn, GetUpperCellOriginRow(worksheet, lastColumn, cellRow), lastColumn).Merge();
+                    lastUsedRow = cellRow;
+                }
+                else if (GetLowerCellOriginRow(worksheet, lastColumn, lastUsedRow) <= cellRow - 1)
+                {
+                    IXLRange mergeAreaRange = worksheet.Range(GetLowerCellOriginRow(worksheet, lastColumn, lastUsedRow), startColumn, cellRow - 1, lastColumn);
+                    mergeAreaRange.Merge();
+                    mergeAreaRange.FirstCell().WorksheetRow().Cell(startColumn).FormulaA1 = worksheet.Cell(startRow, startColumn).Address.ToString();
+                    lastUsedRow = cellRow;
+                }
+                if (i == usedCells.Count() - 1)
+                {
+                    int row = GetLowerCellOriginRow(worksheet, lastColumn, cellRow);
+                    if (row <= lastRow)
+                    {
+                        IXLRange mergeAreaRange = worksheet.Range(row, startColumn, lastRow, lastColumn);
+                        mergeAreaRange.Merge();
+                        mergeAreaRange.FirstCell().WorksheetRow().Cell(startColumn).FormulaA1 = worksheet.Cell(startRow, startColumn).Address.ToString();
+                    }
+                }
+            }
+        }
+
+        private static int GetUpperCellOriginRow(IXLWorksheet worksheet, int lastColumn, int cellRow)
+        {
+            IXLCell cell = worksheet.Cell(cellRow - 1, lastColumn);
+            return ((cell.IsMerged()) ? cell.MergedRange().FirstCell().WorksheetRow().RowNumber() : cellRow - 1);
+        }
+
+        private static int GetLowerCellOriginRow(IXLWorksheet worksheet, int lastColumn, int cellRow)
+        {
+            IXLCell cell = worksheet.Cell(cellRow, lastColumn);
+            return ((cell.IsMerged()) ? cell.MergedRange().LastCell().WorksheetRow().RowNumber() + 1 : cellRow + 1);
         }
     }
 }
