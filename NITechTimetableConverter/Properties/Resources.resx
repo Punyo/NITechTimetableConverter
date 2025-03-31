@@ -126,18 +126,48 @@
   <data name="MessageEnterPath" xml:space="preserve">
     <value>変換対象の時間割のXLSXファイルへのパスを入力してください：</value>
   </data>
-  <data name="MessageEnterSheet" xml:space="preserve">
-    <value>ファイル内の変換対象の時間割のシート名を入力してください（例：3年前期）：</value>
-  </data>
-  <data name="MessageEnterArea" xml:space="preserve">
-    <value>シート内の時間割が記述されている部分の範囲を指定してください（例：A3:AJ93）：</value>
-  </data>
-  <data name="MessageCaution" xml:space="preserve">
-    <value>注意：このツールは国立大学法人名古屋工業大学や同法人に属する組織からの公式な承認を受けたものではありません
+  <data name="MessageWarning" xml:space="preserve">
+    <value>警告：このツールは国立大学法人名古屋工業大学や同法人に属する組織からの公式な承認を受けたものではありません
 また、このツールを使用したことに起因する如何なる損害も制作者は責任を負いかねます</value>
   </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="XLSXTemplate" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Assets\XLSXTemplate.xlsx;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="MessageStartConvert" xml:space="preserve">
+    <value>{0}枚目のシートの変換を開始しました</value>
+  </data>
+  <data name="ErrorInputInvalidOrNonXLSX" xml:space="preserve">
+    <value>入力が無効か、入力されたファイルがXLSXファイルへのパスではありません</value>
+  </data>
+  <data name="ErrorFileNotFound" xml:space="preserve">
+    <value>ファイルが見つかりません</value>
+  </data>
+  <data name="MessageOpeningConvertedXLSXFile" xml:space="preserve">
+    <value>変換後のXLSXファイルを開いています...</value>
+  </data>
+  <data name="MessageConvertComplete" xml:space="preserve">
+    <value>変換が完了しました！</value>
+  </data>
+  <data name="MessageGitHubURL" xml:space="preserve">
+    <value>GitHub：https://github.com/Punyo/NITechTimetableConverter</value>
+  </data>
+  <data name="MessageXURL" xml:space="preserve">
+    <value>X：https://x.com/rolled_omelette</value>
+  </data>
+  <data name="MessageCaution" xml:space="preserve">
+    <value>注意：一部の教科の変換には対応していません。ごめんね</value>
+  </data>
+  <data name="MessageExtractingLectureInfo" xml:space="preserve">
+    <value>変換対象のXLSXファイルから講義情報を抽出しています...</value>
+  </data>
+  <data name="MessageExtractingLectureInfoComplete" xml:space="preserve">
+    <value>講義情報抽出完了</value>
+  </data>
+  <data name="MessageWritingLectureInfo" xml:space="preserve">
+    <value>テンプレートに講義情報を書き込んでいます...</value>
+  </data>
+  <data name="MessageWritingLectureInfoComplete" xml:space="preserve">
+    <value>講義情報書き込み完了</value>
   </data>
 </root>

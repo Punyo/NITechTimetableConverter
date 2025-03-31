@@ -61,12 +61,38 @@ namespace NITechTimetableConverter.Properties {
         }
         
         /// <summary>
-        ///   注意：このツールは国立大学法人名古屋工業大学や同法人に属する組織からの公式な承認を受けたものではありません
-        ///また、このツールを使用したことに起因する如何なる損害も制作者は責任を負いかねます に類似しているローカライズされた文字列を検索します。
+        ///   ファイルが見つかりません に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string ErrorFileNotFound {
+            get {
+                return ResourceManager.GetString("ErrorFileNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   入力が無効か、入力されたファイルがXLSXファイルへのパスではありません に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string ErrorInputInvalidOrNonXLSX {
+            get {
+                return ResourceManager.GetString("ErrorInputInvalidOrNonXLSX", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   注意：一部の教科の変換には対応していません。ごめんね に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string MessageCaution {
             get {
                 return ResourceManager.GetString("MessageCaution", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   変換が完了しました！ に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string MessageConvertComplete {
+            get {
+                return ResourceManager.GetString("MessageConvertComplete", resourceCulture);
             }
         }
         
@@ -89,15 +115,6 @@ namespace NITechTimetableConverter.Properties {
         }
         
         /// <summary>
-        ///   シート内の時間割が記述されている部分の範囲を指定してください（例：A3:AJ93）： に類似しているローカライズされた文字列を検索します。
-        /// </summary>
-        internal static string MessageEnterArea {
-            get {
-                return ResourceManager.GetString("MessageEnterArea", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   変換対象の時間割のXLSXファイルへのパスを入力してください： に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string MessageEnterPath {
@@ -107,11 +124,84 @@ namespace NITechTimetableConverter.Properties {
         }
         
         /// <summary>
-        ///   ファイル内の変換対象の時間割のシート名を入力してください（例：3年前期）： に類似しているローカライズされた文字列を検索します。
+        ///   変換対象のXLSXファイルから講義情報を抽出しています... に類似しているローカライズされた文字列を検索します。
         /// </summary>
-        internal static string MessageEnterSheet {
+        internal static string MessageExtractingLectureInfo {
             get {
-                return ResourceManager.GetString("MessageEnterSheet", resourceCulture);
+                return ResourceManager.GetString("MessageExtractingLectureInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   講義情報抽出完了 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string MessageExtractingLectureInfoComplete {
+            get {
+                return ResourceManager.GetString("MessageExtractingLectureInfoComplete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   GitHub：https://github.com/Punyo/NITechTimetableConverter に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string MessageGitHubURL {
+            get {
+                return ResourceManager.GetString("MessageGitHubURL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   変換後のXLSXファイルを開いています... に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string MessageOpeningConvertedXLSXFile {
+            get {
+                return ResourceManager.GetString("MessageOpeningConvertedXLSXFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   {0}枚目のシートの変換を開始しました に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string MessageStartConvert {
+            get {
+                return ResourceManager.GetString("MessageStartConvert", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   警告：このツールは国立大学法人名古屋工業大学や同法人に属する組織からの公式な承認を受けたものではありません
+        ///また、このツールを使用したことに起因する如何なる損害も制作者は責任を負いかねます に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string MessageWarning {
+            get {
+                return ResourceManager.GetString("MessageWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   テンプレートに講義情報を書き込んでいます... に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string MessageWritingLectureInfo {
+            get {
+                return ResourceManager.GetString("MessageWritingLectureInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   講義情報書き込み完了 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string MessageWritingLectureInfoComplete {
+            get {
+                return ResourceManager.GetString("MessageWritingLectureInfoComplete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   X：https://x.com/rolled_omelette に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string MessageXURL {
+            get {
+                return ResourceManager.GetString("MessageXURL", resourceCulture);
             }
         }
         
