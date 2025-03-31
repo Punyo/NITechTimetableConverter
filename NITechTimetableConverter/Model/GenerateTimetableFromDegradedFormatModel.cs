@@ -10,12 +10,14 @@ namespace NITechTimetableConverter.Model
     {
         public void GenerateTimetable(string outputPath, bool openGeneratedFile = true, int worksheetIndex = 1)
         {
+            Console.WriteLine(Resources.MessageDivider + Environment.NewLine);
             Console.WriteLine(Resources.MessageStartConvert, worksheetIndex);
             Console.WriteLine(Resources.MessageExtractingLectureInfo);
             IEnumerable<IEnumerable<Lecture>> lectureInfo = LectureExtractor.ExtractLecturesFromXLSXFile(degradedXLSXFilePath, worksheetIndex);
             Console.WriteLine(Resources.MessageExtractingLectureInfoComplete);
             Console.WriteLine(Resources.MessageWritingLectureInfo);
             XLWorkbook workbook = TimetableWorkbookGenerator.GenerateTimetableWorkbook(lectureInfo);
+            workbook.Author = Resources.MessageCredit;
             workbook.SaveAs(outputPath);
             Console.WriteLine(Resources.MessageWritingLectureInfoComplete);
             ConsoleUtil.WriteLineWithColor(string.Format(Resources.MessageConvertComplete), ConsoleUtil.ColorMode.Info);
