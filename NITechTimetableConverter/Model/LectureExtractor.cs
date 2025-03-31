@@ -8,6 +8,8 @@ namespace NITechTimetableConverter.Model
     {
         private readonly static string[] departmentAbbreviates = { "LC", "PE", "EM", "CS", "AC", "CR" };
         private readonly static string allDepartments = "全学科";
+        private readonly static Lecture noInfoInWorksheet = new() { ID = "XXXX", Name = "シラバスを参照してください", Instructor = "XXXX", Classes = [.. Enum.GetValues<Classes>().Cast<Classes>()], Period = Period.OneTwo, Room = "XXXX" };
+
 
         public static IEnumerable<IEnumerable<Lecture>> ExtractLecturesFromXLSXFile(string path, int worksheetIndex = 1)
         {
@@ -32,11 +34,18 @@ namespace NITechTimetableConverter.Model
                     string id = worksheet.Cell(i, baseColumnNumber + 1).Value.ToString();
                     string commaSeperatedClasses = worksheet.Cell(i, baseColumnNumber + (j == 5 ? 4 : 5)).Value.ToString();
                     string lectureName = worksheet.Cell(i, baseColumnNumber + 2).Value.ToString();
+                    if (commaSeperatedClasses.IndexOf("技術と歴史・哲学") > 0 || commaSeperatedClasses.IndexOf("技術と社会・国際") > 0 ||
+                        commaSeperatedClasses.IndexOf("技術と人間・心理") > 0 || (lectureName.IndexOf("English") > -1 && lectureName.IndexOf("Global") == -1))
+                    {
+                        lectures.Add(noInfoInWorksheet with { Period = (Period)j });
+                        break;
+                    }
                     if (string.IsNullOrEmpty(id))
                     {
                         break;
                     }
-                    if (string.IsNullOrEmpty(commaSeperatedClasses) && lectureName.IndexOf("English") == -1)
+                    if (string.IsNullOrEmpty(commaSeperatedClasses) || commaSeperatedClasses.IndexOf("技術と歴史・哲学") == 0 ||
+                        commaSeperatedClasses.IndexOf("技術と社会・国際") == 0 || commaSeperatedClasses.IndexOf("技術と人間・心理") == 0)
                     {
                         commaSeperatedClasses = allDepartments;
                     }
