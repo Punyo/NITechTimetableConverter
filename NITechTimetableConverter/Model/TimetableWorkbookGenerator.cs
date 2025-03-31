@@ -59,12 +59,12 @@ namespace NITechTimetableConverter.Model
             int startRow = dayOfWeekRowNumber + currentStartCellIndex;
             int startColumn = dayOfWeekColumnNumbers[dayOfWeekIndex] + (int)lecture.Period * 2;
             IXLCell cell = worksheet.Cell(startRow, startColumn);
+            int lectureRowLength = previousIndex - currentStartCellIndex;
             if (string.IsNullOrEmpty(cell.Value.ToString()))
             {
                 cell.Value = lecture.ToString();
                 //worksheet.Range(startRow, startColumn, startRow + (previousIndex - currentStartCellIndex), startColumn + ((lecture.Period == Period.OnDemand) ? 0 : 1)).Merge();
-                SearchUsedCellsAndMergeUnusedArea(worksheet, lecture.ToString(), startRow, startColumn, startRow + (previousIndex - currentStartCellIndex), startColumn + ((lecture.Period == Period.OnDemand) ? 0 : 1));
-
+                SearchUsedCellsAndMergeUnusedArea(worksheet, lecture.ToString(), startRow, startColumn, startRow + lectureRowLength, startColumn + ((lecture.Period == Period.OnDemand) ? 0 : 1));
             }
             else
             {
@@ -99,6 +99,10 @@ namespace NITechTimetableConverter.Model
                     {
                         cell.Value += $"{Environment.NewLine}{Environment.NewLine}{lecture.ToString()}";
                     }
+                }
+                if (lectureRowLength >= 1)
+                {
+                    WriteAndMergeCell(worksheet, dayOfWeekIndex, lecture, previousIndex, currentStartCellIndex + 1);
                 }
             }
         }
