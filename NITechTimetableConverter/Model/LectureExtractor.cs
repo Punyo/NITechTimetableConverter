@@ -22,8 +22,21 @@ namespace NITechTimetableConverter.Model
         public static IEnumerable<IEnumerable<Lecture>> ExtractLecturesFromSheet(IXLWorksheet worksheet)
         {
             int dayOfWeekColumnNumber = worksheet.Cell("RowName").WorksheetColumn().ColumnNumber();
-            IEnumerable<IXLRange> dayOfWeekRange = worksheet.MergedRanges.Where(r => r.RangeAddress.FirstAddress.ColumnNumber == dayOfWeekColumnNumber);
-            return dayOfWeekRange.Select(r => GetLecturesByDayOfWeekRangeInRowName(worksheet, r)).ToArray();
+            List<IXLRange> dayOfWeekRanges = new();
+            IXLCell currentCell = worksheet.Cell("RowName").CellBelow();
+            while (true)
+            {
+                if (currentCell.Value.IsBlank && !currentCell.IsMerged())
+                {
+                    break;
+                }
+                else if (!currentCell.Value.IsBlank)
+                {
+                    dayOfWeekRanges.Add(currentCell.IsMerged() ? currentCell.MergedRange() : worksheet.Range(currentCell.Address, currentCell.Address));
+                }
+                currentCell = currentCell.CellBelow();
+            }
+            return dayOfWeekRanges.Select(r => GetLecturesByDayOfWeekRangeInRowName(worksheet, r)).ToArray();
         }
 
         private static IEnumerable<Lecture> GetLecturesByDayOfWeekRangeInRowName(IXLWorksheet worksheet, IXLRange dayOfWeekRangeInRowName)
