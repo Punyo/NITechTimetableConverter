@@ -26,6 +26,7 @@ internal class Program
             while (Console.ReadKey().Key != ConsoleKey.Enter) { }
             GenerationProcess(path);
         }
+#if RELEASE
         catch (Exception e)
         {
             ConsoleUtil.WriteLineWithColor(string.Format(Resources.ErrorGeneric, e.ToString()), ConsoleUtil.ColorMode.Error);
@@ -33,5 +34,6 @@ internal class Program
             while (Console.ReadKey().Key != ConsoleKey.Enter) { }
             Main(Array.Empty<string>());
         }
+#endif
     }
 }
