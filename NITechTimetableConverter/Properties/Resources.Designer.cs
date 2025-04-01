@@ -193,7 +193,7 @@ namespace NITechTimetableConverter.Properties {
         }
         
         /// <summary>
-        ///   {0}枚目のシートの変換を開始しました に類似しているローカライズされた文字列を検索します。
+        ///   シートの変換を開始しました に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string MessageStartConvert {
             get {

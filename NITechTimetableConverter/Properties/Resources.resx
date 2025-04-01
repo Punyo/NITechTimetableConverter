@@ -130,12 +130,8 @@
     <value>警告：このツールは国立大学法人名古屋工業大学や同法人に属する組織からの公式な承認を受けたものではありません
 また、このツールを使用したことに起因する如何なる損害も制作者は責任を負いかねます</value>
   </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="XLSXTemplate" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Assets\XLSXTemplate.xlsx;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="MessageStartConvert" xml:space="preserve">
-    <value>{0}枚目のシートの変換を開始しました</value>
+    <value>シートの変換を開始しました</value>
   </data>
   <data name="ErrorInputInvalidOrNonXLSX" xml:space="preserve">
     <value>入力が無効か、入力されたファイルがXLSXファイルへのパスではありません</value>
@@ -184,5 +180,9 @@
   <data name="MessageRetry" xml:space="preserve">
     <value>再試行する場合は&lt;Enter&gt;を押してください...
 </value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="XLSXTemplate" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Assets\XLSXTemplate.xlsx;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
 </root>
