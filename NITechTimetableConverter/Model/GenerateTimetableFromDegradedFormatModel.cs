@@ -8,12 +8,12 @@ namespace NITechTimetableConverter.Model
 {
     internal class GenerateTimetableFromDegradedFormatModel(string degradedXLSXFilePath)
     {
-        public void GenerateTimetable(string outputPath, bool openGeneratedFile = true, int worksheetIndex = 1)
+        public void GenerateTimetable(string outputPath, bool openGeneratedFile = true)
         {
             Console.WriteLine(Resources.MessageDivider + Environment.NewLine);
-            Console.WriteLine(Resources.MessageStartConvert, worksheetIndex);
+            Console.WriteLine(Resources.MessageStartConvert);
             Console.WriteLine(Resources.MessageExtractingLectureInfo);
-            IEnumerable<IEnumerable<Lecture>> lectureInfo = LectureExtractor.ExtractLecturesFromXLSXFile(degradedXLSXFilePath, worksheetIndex);
+            IEnumerable<IEnumerable<IEnumerable<Lecture>>> lectureInfo = LectureExtractor.ExtractLecturesFromXLSXFile(degradedXLSXFilePath);
             Console.WriteLine(Resources.MessageExtractingLectureInfoComplete);
             Console.WriteLine(Resources.MessageWritingLectureInfo);
             XLWorkbook workbook = TimetableWorkbookGenerator.GenerateTimetableWorkbook(lectureInfo);

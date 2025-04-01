@@ -8,20 +8,29 @@ namespace NITechTimetableConverter.Model
     {
         private static readonly int[] dayOfWeekColumnNumbers = { 1, 12, 27, 38, 49 };
         private static readonly int dayOfWeekRowNumber = 5;
-        public static XLWorkbook GenerateTimetableWorkbook(IEnumerable<IEnumerable<Lecture>> lectures)
+        public static XLWorkbook GenerateTimetableWorkbook(IEnumerable<IEnumerable<IEnumerable<Lecture>>> lectures)
         {
-
-            XLWorkbook returnWorkbook = new();
-            using (XLWorkbook templateWorkbook = new(new MemoryStream(Resources.XLSXTemplate)))
+            XLWorkbook workbook = new();
+            using (XLWorkbook template = new(new MemoryStream(Resources.XLSXTemplate)))
             {
-                IXLWorksheet worksheet = templateWorkbook.Worksheet(1);
                 for (int i = 0; i < lectures.Count(); i++)
                 {
-                    WriteCellByDayOfWeek(lectures, worksheet, i);
+                    workbook.AddWorksheet(GenerateTimetableSheet(template, i.ToString(), lectures.ElementAt(i)));
                 }
-                returnWorkbook.AddWorksheet(worksheet);
+                return workbook;
             }
-            return returnWorkbook;
+        }
+
+        private static IXLWorksheet GenerateTimetableSheet(XLWorkbook template, string sheetName, IEnumerable<IEnumerable<Lecture>> lectures)
+        {
+
+            IXLWorksheet worksheet = template.Worksheet(1).CopyTo(sheetName);
+            for (int i = 0; i < lectures.Count(); i++)
+            {
+                WriteCellByDayOfWeek(lectures, worksheet, i);
+            }
+            return worksheet;
+
         }
 
         private static void WriteCellByDayOfWeek(IEnumerable<IEnumerable<Lecture>> lectures, IXLWorksheet worksheet, int dayOfWeekIndex)
@@ -31,25 +40,25 @@ namespace NITechTimetableConverter.Model
 
                 Lecture lecture = lectures.ElementAt(dayOfWeekIndex).OrderBy((l) => l.Classes.Length).ElementAt(ii);
                 Array.Sort(lecture.Classes);
-                int previousIndex = -1;
-                int currentStartCellIndex = -1;
+                int previousClassIndex = -1;
+                int currentClassIndex = -1;
                 for (int iii = 0; iii < lecture.Classes.Length; iii++)
                 {
-                    if (currentStartCellIndex == -1)
+                    if (currentClassIndex == -1)
                     {
-                        currentStartCellIndex = (int)lecture.Classes[iii];
+                        currentClassIndex = (int)lecture.Classes[iii];
                     }
                     int currentIndex = (int)lecture.Classes[iii];
-                    if (previousIndex != currentIndex - 1 && previousIndex != -1)
+                    if (previousClassIndex != currentIndex - 1 && previousClassIndex != -1)
                     {
-                        WriteAndMergeCell(worksheet, dayOfWeekIndex, lecture, previousIndex, currentStartCellIndex);
-                        currentStartCellIndex = currentIndex;
+                        WriteAndMergeCell(worksheet, dayOfWeekIndex, lecture, previousClassIndex, currentClassIndex);
+                        currentClassIndex = currentIndex;
                     }
-                    previousIndex = currentIndex;
+                    previousClassIndex = currentIndex;
                 }
-                if (currentStartCellIndex != -1)
+                if (currentClassIndex != -1)
                 {
-                    WriteAndMergeCell(worksheet, dayOfWeekIndex, lecture, previousIndex, currentStartCellIndex);
+                    WriteAndMergeCell(worksheet, dayOfWeekIndex, lecture, previousClassIndex, currentClassIndex);
                 }
             }
         }

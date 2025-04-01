@@ -11,15 +11,19 @@ namespace NITechTimetableConverter.Model
         private readonly static Lecture noInfoInWorksheet = new() { ID = "XXXX", Name = "シラバスを参照してください", Instructor = "XXXX", Classes = [.. Enum.GetValues<Classes>().Cast<Classes>()], Period = Period.OneTwo, Room = "XXXX" };
 
 
-        public static IEnumerable<IEnumerable<Lecture>> ExtractLecturesFromXLSXFile(string path, int worksheetIndex = 1)
+        public static IEnumerable<IEnumerable<IEnumerable<Lecture>>> ExtractLecturesFromXLSXFile(string path)
         {
             using (var workbook = new XLWorkbook(path))
             {
-                var worksheet = workbook.Worksheet(worksheetIndex);
-                int dayOfWeekColumnNumber = worksheet.Cell("RowName").WorksheetColumn().ColumnNumber();
-                IEnumerable<IXLRange> dayOfWeekRange = worksheet.MergedRanges.Where(r => r.RangeAddress.FirstAddress.ColumnNumber == dayOfWeekColumnNumber);
-                return dayOfWeekRange.Select(r => GetLecturesByDayOfWeekRangeInRowName(worksheet, r)).ToArray();
+                return workbook.Worksheets.Where((sheets) => { return sheets.Visibility == XLWorksheetVisibility.Visible; }).Select(ExtractLecturesFromSheet).ToArray();
             }
+        }
+
+        public static IEnumerable<IEnumerable<Lecture>> ExtractLecturesFromSheet(IXLWorksheet worksheet)
+        {
+            int dayOfWeekColumnNumber = worksheet.Cell("RowName").WorksheetColumn().ColumnNumber();
+            IEnumerable<IXLRange> dayOfWeekRange = worksheet.MergedRanges.Where(r => r.RangeAddress.FirstAddress.ColumnNumber == dayOfWeekColumnNumber);
+            return dayOfWeekRange.Select(r => GetLecturesByDayOfWeekRangeInRowName(worksheet, r)).ToArray();
         }
 
         private static IEnumerable<Lecture> GetLecturesByDayOfWeekRangeInRowName(IXLWorksheet worksheet, IXLRange dayOfWeekRangeInRowName)
