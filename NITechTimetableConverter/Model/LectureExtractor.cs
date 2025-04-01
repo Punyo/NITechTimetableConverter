@@ -1,4 +1,6 @@
 ﻿using ClosedXML.Excel;
+using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
+using DocumentFormat.OpenXml.Presentation;
 using NITechTimetableConverter.Data;
 using System.Text.RegularExpressions;
 
@@ -7,6 +9,7 @@ namespace NITechTimetableConverter.Model
     internal class LectureExtractor
     {
         private readonly static string[] departmentAbbreviates = { "LC", "PE", "EM", "CS", "AC", "CR" };
+        private readonly static string[] dayOfWeekAbbeviates = { "月", "火", "水", "木", "金" };
         private readonly static string allDepartments = "全学科";
         private readonly static Lecture noInfoInWorksheet = new() { ID = "XXXX", Name = "シラバスを参照してください", Instructor = "XXXX", Classes = [.. Enum.GetValues<Classes>().Cast<Classes>()], Period = Period.OneTwo, Room = "XXXX" };
 
@@ -23,18 +26,10 @@ namespace NITechTimetableConverter.Model
         {
             int dayOfWeekColumnNumber = worksheet.Cell("RowName").WorksheetColumn().ColumnNumber();
             List<IXLRange> dayOfWeekRanges = new();
-            IXLCell currentCell = worksheet.Cell("RowName").CellBelow();
-            while (true)
+            foreach (var item in dayOfWeekAbbeviates)
             {
-                if (currentCell.Value.IsBlank && !currentCell.IsMerged())
-                {
-                    break;
-                }
-                else if (!currentCell.Value.IsBlank)
-                {
-                    dayOfWeekRanges.Add(currentCell.IsMerged() ? currentCell.MergedRange() : worksheet.Range(currentCell.Address, currentCell.Address));
-                }
-                currentCell = currentCell.CellBelow();
+                IXLCell dayOfWeekCell = worksheet.Column(dayOfWeekColumnNumber).CellsUsed(c => c.Value.ToString().Contains(item)).First();
+                dayOfWeekRanges.Add(dayOfWeekCell.IsMerged() ? dayOfWeekCell.MergedRange() : worksheet.Range(dayOfWeekCell.Address, dayOfWeekCell.Address));
             }
             return dayOfWeekRanges.Select(r => GetLecturesByDayOfWeekRangeInRowName(worksheet, r)).ToArray();
         }
