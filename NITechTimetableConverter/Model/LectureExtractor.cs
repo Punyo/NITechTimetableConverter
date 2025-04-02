@@ -1,6 +1,4 @@
 ﻿using ClosedXML.Excel;
-using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
-using DocumentFormat.OpenXml.Presentation;
 using NITechTimetableConverter.Data;
 using System.Text.RegularExpressions;
 
