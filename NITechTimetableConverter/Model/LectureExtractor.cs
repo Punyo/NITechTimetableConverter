@@ -7,6 +7,7 @@ namespace NITechTimetableConverter.Model
     internal class LectureExtractor
     {
         private readonly static string[] departmentAbbreviates = { "LC", "PE", "EM", "CS", "AC", "CR" };
+        private readonly static string[] dayOfWeekAbbeviates = { "月", "火", "水", "木", "金" };
         private readonly static string allDepartments = "全学科";
         private readonly static Lecture noInfoInWorksheet = new() { ID = "XXXX", Name = "シラバスを参照してください", Instructor = "XXXX", Classes = [.. Enum.GetValues<Classes>().Cast<Classes>()], Period = Period.OneTwo, Room = "XXXX" };
 
@@ -22,8 +23,13 @@ namespace NITechTimetableConverter.Model
         public static IEnumerable<IEnumerable<Lecture>> ExtractLecturesFromSheet(IXLWorksheet worksheet)
         {
             int dayOfWeekColumnNumber = worksheet.Cell("RowName").WorksheetColumn().ColumnNumber();
-            IEnumerable<IXLRange> dayOfWeekRange = worksheet.MergedRanges.Where(r => r.RangeAddress.FirstAddress.ColumnNumber == dayOfWeekColumnNumber);
-            return dayOfWeekRange.Select(r => GetLecturesByDayOfWeekRangeInRowName(worksheet, r)).ToArray();
+            List<IXLRange> dayOfWeekRanges = new();
+            foreach (var item in dayOfWeekAbbeviates)
+            {
+                IXLCell dayOfWeekCell = worksheet.Column(dayOfWeekColumnNumber).CellsUsed(c => c.Value.ToString().Contains(item)).First();
+                dayOfWeekRanges.Add(dayOfWeekCell.IsMerged() ? dayOfWeekCell.MergedRange() : worksheet.Range(dayOfWeekCell.Address, dayOfWeekCell.Address));
+            }
+            return dayOfWeekRanges.Select(r => GetLecturesByDayOfWeekRangeInRowName(worksheet, r)).ToArray();
         }
 
         private static IEnumerable<Lecture> GetLecturesByDayOfWeekRangeInRowName(IXLWorksheet worksheet, IXLRange dayOfWeekRangeInRowName)

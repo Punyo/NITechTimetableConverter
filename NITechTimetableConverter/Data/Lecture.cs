@@ -29,7 +29,9 @@ namespace NITechTimetableConverter.Data
         {
             try
             {
+#pragma warning disable CS8604 
                 result = Parse(s);
+#pragma warning restore CS8604 
                 return true;
             }
             catch (Exception e) when (e is NullReferenceException || e is IndexOutOfRangeException)

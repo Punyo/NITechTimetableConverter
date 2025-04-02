@@ -15,9 +15,70 @@ namespace NITechTimetableConverter.Model
             {
                 for (int i = 0; i < lectures.Count(); i++)
                 {
-                    workbook.AddWorksheet(GenerateTimetableSheet(template, i.ToString(), lectures.ElementAt(i)));
+                    IXLWorksheet worksheet = GenerateTimetableSheet(template, i.ToString(), lectures.ElementAt(i));
+                    MergeContinuousCellsWithSameText(worksheet);
+                    workbook.AddWorksheet(worksheet);
                 }
                 return workbook;
+            }
+        }
+
+        private static void MergeContinuousCellsWithSameText(IXLWorksheet worksheet)
+        {
+            string lastCellValue = string.Empty;
+            int startColumn = -1;
+            int startRow = -1;
+            int endColumn = -1;
+            int endRow = -1;
+            foreach (var row in worksheet.RowsUsed())
+            {
+                foreach (var cell in row.CellsUsed())
+                {
+                    string cellValue = cell.Value.ToString();
+
+                    if (cell.IsMerged())
+                    {
+                        IXLRange mergedRange = cell.MergedRange();
+                        IXLCell firstCell = mergedRange.FirstCell();
+                        IXLCell lastCell = mergedRange.LastCell();
+                        cellValue = firstCell.Value.ToString();
+                        if (lastCellValue == cellValue && !string.IsNullOrEmpty(cellValue))
+                        {
+                            if (startColumn == -1)
+                            {
+                                startColumn = firstCell.WorksheetColumn().ColumnNumber();
+                                startRow = firstCell.WorksheetRow().RowNumber();
+                            }
+                            endColumn = lastCell.WorksheetColumn().ColumnNumber();
+                            endRow = lastCell.WorksheetRow().RowNumber();
+                        }
+                        else
+                        {
+                            if (startColumn != -1 && endColumn != -1 && startColumn != endColumn)
+                            {
+                                worksheet.Range(startRow, startColumn, endRow, endColumn).Merge();
+                            }
+                            startColumn = cell.WorksheetColumn().ColumnNumber();
+                            startRow = cell.WorksheetRow().RowNumber();
+                            endColumn = startColumn;
+                            endRow = startRow;
+                        }
+
+                        lastCellValue = cellValue;
+                    }
+
+                }
+
+                if (startColumn != -1 && endColumn != -1 && startColumn != endColumn)
+                {
+                    worksheet.Range(startRow, startColumn, endRow, endColumn).Merge();
+                }
+
+                lastCellValue = string.Empty;
+                startColumn = -1;
+                startRow = -1;
+                endColumn = -1;
+                endRow = -1;
             }
         }
 
